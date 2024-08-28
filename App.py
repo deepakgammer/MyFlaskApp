@@ -36,7 +36,7 @@ with app.app_context():
 @app.route('/')
 def index():
     updates = Update.query.all()
-    return render_template('index.html', updates=updates)
+    return render_template('Index.html', updates=updates)
 
 @app.route('/submit', methods=['POST'])
 def submit():
