@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Directory</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Flash messages for feedback -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}" role="alert">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+        
+        <h1 class="text-center">Directory: {{ directory_name }}</h1>
+
+        <h2>Files in Directory</h2>
+        <ul class="list-group mb-4">
+            {% if files %}
+                {% for file in files %}
+                <li class="list-group-item">
+                    {{ file }}
+                    <a href="{{ url_for('delete_file', directory_name=directory_name, filename=file) }}" class="btn btn-danger btn-sm float-right">Delete</a>
+                </li>
+                {% endfor %}
+            {% else %}
+                <li class="list-group-item">No files in this directory.</li>
+            {% endif %}
+        </ul>
+
+        <!-- Form to upload a file to this directory -->
+        <h2>Upload a File to This Directory</h2>
+        <form action="/upload_to_directory" method="post" enctype="multipart/form-data" class="mb-5">
+            <input type="hidden" name="directory_name" value="{{ directory_name }}">
+            <div class="form-group">
+                <label for="file">Select a file:</label>
+                <input type="file" id="file" name="file" class="form-control-file" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload File</button>
+        </form>
+
+        <a href="/manage_directories" class="btn btn-secondary mt-3">Back to Directory Management</a>
+        <a href="{{ url_for('delete_directory', directory_name=directory_name) }}" class="btn btn-danger mt-3">Delete Directory</a>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

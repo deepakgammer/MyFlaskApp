@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atatio Interactive</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #1e3c72, #2a5298);
+            color: black;
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        h1, p, label, .btn {
+            color: black;
+        }
+        .list-group-item {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Welcome to Atatio Interactive</h1>
+        <p class="text-center">This is your daily updates app.</p>
+
+        {% if not session.logged_in %}
+        <div class="text-center mb-4">
+            <a href="{{ url_for('login') }}" class="btn btn-primary">Login</a>
+            <a href="{{ url_for('signup') }}" class="btn btn-info">Sign Up</a>
+        </div>
+        {% endif %}
+
+        {% if session.logged_in %}
+        <form action="/submit" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="update">Enter your daily update:</label>
+                <textarea id="update" name="update" class="form-control" rows="3" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="file">Upload a file:</label>
+                <input type="file" id="file" name="file" class="form-control-file">
+            </div>
+            <button type="submit" class="btn btn-success">Submit</button>
+        </form>
+
+        <h3 class="mt-4">Previous Updates:</h3>
+        <ul class="list-group">
+            {% for update in updates %}
+            <li class="list-group-item">
+                {{ update.content }}
+                {% if update.filename %}
+                - <a href="{{ url_for('static', filename='uploads/' ~ update.filename) }}" class="text-info">Download</a>
+                <a href="{{ url_for('delete_update', update_id=update.id) }}" class="btn btn-danger btn-sm float-right">Delete</a>
+                {% else %}
+                <a href="{{ url_for('delete_update', update_id=update.id) }}" class="btn btn-danger btn-sm float-right">Delete</a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div class="mt-4">
+            <a href="{{ url_for('manage_directories') }}" class="btn btn-secondary">Manage Directories</a>
+            <a href="{{ url_for('manage_apk_files') }}" class="btn btn-secondary">Manage APK Files</a>
+            <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

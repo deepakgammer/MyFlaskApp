@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Directories - Atatio Interactive</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #1e3c72, #2a5298);
+            color: white;
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Manage Directories</h1>
+        <p class="text-center">Create and manage your directories here.</p>
+        
+        <form action="/manage_directories" method="POST" class="mb-4">
+            <div class="form-group">
+                <label for="directory_name">Directory Name:</label>
+                <input type="text" class="form-control" id="directory_name" name="directory_name" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Create Directory</button>
+        </form>
+
+        <h3>Existing Directories:</h3>
+        <ul class="list-group mb-4">
+            {% for directory in directories %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ directory }}
+                <a href="{{ url_for('delete_directory', directory_name=directory) }}" class="btn btn-danger btn-sm">Delete</a>
+            </li>
+            {% endfor %}
+            {% if not directories %}
+            <li class="list-group-item">No directories found.</li>
+            {% endif %}
+        </ul>
+
+        <a href="/" class="btn btn-secondary">Back to Home</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

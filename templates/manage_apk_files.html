@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage APK Files - Atatio Interactive</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #1e3c72, #2a5298);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .btn {
+            color: black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Manage APK Files</h1>
+        <p class="text-center">Upload, update, and delete .apk files.</p>
+
+        <form action="/upload_apk" method="post" enctype="multipart/form-data" class="mb-5">
+            <div class="form-group">
+                <label for="file">Select an APK file:</label>
+                <input type="file" id="file" name="file" class="form-control-file" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload APK</button>
+        </form>
+
+        <h2>Existing APK Files</h2>
+        <ul class="list-group mb-5">
+            {% if apk_files %}
+                {% for apk_file in apk_files %}
+                <li class="list-group-item">
+                    {{ apk_file }}
+                    <form action="{{ url_for('update_apk', filename=apk_file) }}" method="post" enctype="multipart/form-data" class="float-right ml-2">
+                        <input type="file" name="file" class="form-control-file" required>
+                        <button type="submit" class="btn btn-warning btn-sm mt-2">Update</button>
+                    </form>
+                    <a href="{{ url_for('delete_apk', filename=apk_file) }}" class="btn btn-danger btn-sm float-right">Delete</a>
+                </li>
+                {% endfor %}
+            {% else %}
+                <li class="list-group-item">No APK files found.</li>
+            {% endif %}
+        </ul>
+
+        <a href="/" class="btn btn-secondary">Back to Home</a>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
